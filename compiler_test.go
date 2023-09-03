@@ -47,8 +47,8 @@ func TestCompilerCompile(t *testing.T) {
 
 	for i, test := range tests {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
-			c := huffc.New(test.Options)
-			gotContract, gotErr := c.Compile(filepath.Join("testdata", test.Filename))
+			c := huffc.New()
+			gotContract, gotErr := c.Compile(filepath.Join("testdata", test.Filename), test.Options)
 			if !errors.Is(gotErr, test.WantErr) {
 				t.Errorf("Err: want %v, got %v", test.WantErr, gotErr)
 			}

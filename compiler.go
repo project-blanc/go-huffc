@@ -20,31 +20,20 @@ var (
 
 // Compiler represents a compiler for Huff contracts.
 type Compiler struct {
-	evmVersion EVMVersion
+	cmd string
 }
 
-// Options for the [Compiler]. A zero Options consists entirely of default values.
-type Options struct {
-	EVMVersion EVMVersion
-}
-
-// New returns a new instance of the compiler that is configured with the given options.
-func New(opts *Options) *Compiler {
+// New returns a new instance of the compiler.
+func New() *Compiler {
 	c := &Compiler{
-		evmVersion: defaultEVMVersion,
-	}
-	if opts == nil {
-		return c
-	}
-
-	if opts.EVMVersion != "" {
-		c.evmVersion = opts.EVMVersion
+		cmd: "huffc",
 	}
 	return c
 }
 
-// Compile the given huff-file and return the compiled contract.
-func (c *Compiler) Compile(filename string) (*Contract, error) {
+// Compile the given huff-file with the given options and return the compiled
+// contract.
+func (c *Compiler) Compile(filename string, opts *Options) (*Contract, error) {
 	// check if file exists
 	stat, err := os.Stat(filename)
 	if err != nil {
@@ -54,10 +43,16 @@ func (c *Compiler) Compile(filename string) (*Contract, error) {
 		return nil, fmt.Errorf("file %q is a directory", filename)
 	}
 
-	ex := exec.Command("huffc",
+	// check options
+	if opts == nil {
+		opts = new(Options)
+	}
+	opts.setDefaults()
+
+	ex := exec.Command(c.cmd,
 		"--bin-runtime",
 		"--bytecode",
-		"--evm-version", string(c.evmVersion),
+		"--evm-version", string(opts.EVMVersion),
 		filename,
 	)
 	outBuf := new(bytes.Buffer)
@@ -92,4 +87,10 @@ func (c *Compiler) Compile(filename string) (*Contract, error) {
 		return nil, fmt.Errorf("%w: unexpected error", ErrCompilationFailed)
 	}
 	return contract, nil
+}
+
+// Contract represents a compiled contract.
+type Contract struct {
+	Code       []byte // The runtime bytecode of the contract after deployment.
+	DeployCode []byte // The bytecode to deploy the contract.
 }
