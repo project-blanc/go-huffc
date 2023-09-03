@@ -1,4 +1,4 @@
-package huff_test
+package huffc_test
 
 import (
 	"errors"
@@ -7,47 +7,47 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/project-blanc/go-huff"
+	"github.com/project-blanc/go-huffc"
 )
 
 func TestCompilerCompile(t *testing.T) {
 	tests := []struct {
 		Filename     string
-		Options      *huff.Options
-		WantContract *huff.Contract
+		Options      *huffc.Options
+		WantContract *huffc.Contract
 		WantErr      error
 	}{
 		{
 			Filename: "stop.huff",
-			WantContract: &huff.Contract{
+			WantContract: &huffc.Contract{
 				Code:       []byte{0x00},
 				DeployCode: []byte{0x60, 0x01, 0x80, 0x60, 0x09, 0x3d, 0x39, 0x3d, 0xf3, 0x00},
 			},
 		},
 		{
 			Filename: "push.huff",
-			WantContract: &huff.Contract{
+			WantContract: &huffc.Contract{
 				Code:       []byte{0x5f},
 				DeployCode: []byte{0x60, 0x01, 0x80, 0x60, 0x09, 0x3d, 0x39, 0x3d, 0xf3, 0x5f},
 			},
 		},
 		{
 			Filename: "push.huff",
-			Options:  &huff.Options{EVMVersion: huff.EVMVersionParis},
-			WantContract: &huff.Contract{
+			Options:  &huffc.Options{EVMVersion: huffc.EVMVersionParis},
+			WantContract: &huffc.Contract{
 				Code:       []byte{0x60, 0x00},
 				DeployCode: []byte{0x60, 0x02, 0x80, 0x60, 0x09, 0x3d, 0x39, 0x3d, 0xf3, 0x60, 0x00},
 			},
 		},
 		{
 			Filename: "error.huff",
-			WantErr:  huff.ErrCompilationFailed,
+			WantErr:  huffc.ErrCompilationFailed,
 		},
 	}
 
 	for i, test := range tests {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
-			c := huff.New(test.Options)
+			c := huffc.New(test.Options)
 			gotContract, gotErr := c.Compile(filepath.Join("testdata", test.Filename))
 			if !errors.Is(gotErr, test.WantErr) {
 				t.Errorf("Err: want %v, got %v", test.WantErr, gotErr)

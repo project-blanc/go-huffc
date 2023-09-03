@@ -1,4 +1,4 @@
-package huff
+package huffc
 
 import (
 	"bufio"
