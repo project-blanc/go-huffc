@@ -16,12 +16,15 @@ go get github.com/project-blanc/go-huffc
 
 ```go
 // Compile a contract with default compiler settings
-c := huffc.New(nil)
-contract, err := c.Compile("contract.huff")
+c := huffc.New()
+contract, err := c.Compile("contract.huff", nil)
 
 // Compile a contract with custom compiler settings
-c := huffc.New(&huff.Options{
+c := huffc.New()
+contract, err := c.Compile("contract.huff", &huffc.Options{
     EVMVersion: huffc.EVMVersionIstanbul,
 })
-contract, err := c.Compile("contract.huff")
 ```
+
+> [!WARNING]
+> This package is pre-1.0. There might be breaking changes between minor versions.
