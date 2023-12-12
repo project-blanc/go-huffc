@@ -3,4 +3,8 @@ updates:
   - package-ecosystem: "gomod"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+  - package-ecosystem: "gomod"
+    directory: "/example"
+    schedule:
+      interval: "weekly"
