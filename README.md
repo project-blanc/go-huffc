@@ -5,7 +5,7 @@
 
 `go-huffc` provides an easy way to compile [Huff](https://github.com/huff-language/huff-rs) contracts from Go.
 
-> **Note**
+> [!NOTE]
 > `go-huffc` requires the `huffc` binary to be installed. See [huff.sh](https://huff.sh) for installation instructions.
 
 ```
@@ -25,6 +25,11 @@ contract, err := c.Compile("contract.huff", &huffc.Options{
     EVMVersion: huffc.EVMVersionIstanbul,
 })
 ```
+
+## Example Project
+
+See the [example project](https://github.com/project-blanc/go-huffc/tree/main/example) for a basic reference on how to test and fuzz a Huff contract in Go.
+
 
 > [!WARNING]
 > This package is pre-1.0. There might be breaking changes between minor versions.
