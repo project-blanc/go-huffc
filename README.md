@@ -28,7 +28,7 @@ contract, err := c.Compile("contract.huff", &huffc.Options{
 
 ## Example Project
 
-See the [example project](https://github.com/project-blanc/go-huffc/tree/main/example) for a basic reference on how to test and fuzz a Huff contract in Go.
+See the [example project](https://github.com/project-blanc/go-huffc/tree/main/example) for a basic reference on how to **test** and **fuzz** a Huff contract in Go.
 
 
 > [!WARNING]
