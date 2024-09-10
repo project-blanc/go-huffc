@@ -51,7 +51,7 @@ func TestAdd(t *testing.T) {
 		// deployed to `contractAddr`
 		vm, _ := w3vm.New(
 			w3vm.WithState(w3types.State{
-				contractAddr: {Code: contract.Code},
+				contractAddr: {Code: contract.Runtime},
 			}),
 		)
 
@@ -88,7 +88,7 @@ func FuzzAdd(f *testing.F) {
 	}
 
 	preState := w3vm.WithState(w3types.State{
-		contractAddr: {Code: contract.Code},
+		contractAddr: {Code: contract.Runtime},
 	})
 
 	f.Fuzz(func(t *testing.T, aBytes, bBytes []byte) {

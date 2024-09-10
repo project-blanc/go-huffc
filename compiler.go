@@ -68,13 +68,13 @@ func (c *Compiler) Compile(filename string, opts *Options) (*Contract, error) {
 	s := bufio.NewScanner(outBuf)
 	for s.Scan() {
 		if code, ok := bytes.CutPrefix(s.Bytes(), codePrefix); ok {
-			contract.Code = make([]byte, hex.DecodedLen(len(code)))
-			if _, err := hex.Decode(contract.Code, code); err != nil {
+			contract.Runtime = make([]byte, hex.DecodedLen(len(code)))
+			if _, err := hex.Decode(contract.Runtime, code); err != nil {
 				return nil, err
 			}
 		} else if code, ok := bytes.CutPrefix(s.Bytes(), deployCodePrefix); ok {
-			contract.DeployCode = make([]byte, hex.DecodedLen(len(code)))
-			if _, err := hex.Decode(contract.DeployCode, code); err != nil {
+			contract.Constructor = make([]byte, hex.DecodedLen(len(code)))
+			if _, err := hex.Decode(contract.Constructor, code); err != nil {
 				return nil, err
 			}
 		}
@@ -83,7 +83,7 @@ func (c *Compiler) Compile(filename string, opts *Options) (*Contract, error) {
 		return nil, err
 	}
 
-	if contract.Code == nil || contract.DeployCode == nil {
+	if contract.Runtime == nil || contract.Constructor == nil {
 		return nil, fmt.Errorf("%w: unexpected error", ErrCompilationFailed)
 	}
 	return contract, nil
@@ -91,6 +91,6 @@ func (c *Compiler) Compile(filename string, opts *Options) (*Contract, error) {
 
 // Contract represents a compiled contract.
 type Contract struct {
-	Code       []byte // The runtime bytecode of the contract after deployment.
-	DeployCode []byte // The bytecode to deploy the contract.
+	Runtime     []byte // The runtime bytecode of the contract.
+	Constructor []byte // The constructor bytecode of the contract.
 }
